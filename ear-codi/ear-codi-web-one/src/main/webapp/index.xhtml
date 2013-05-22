@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Index InitView</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:messages/>
+            Information:
+            <p>
+                The webapp has a CODI dependencies marked as compile and runtime. With this CODI work as expected, the method annotated with
+                @PostConstruct, @InitView and @PreRenderView in the managed bean is called. This is the expected behavior.
+            </p>
+
+            Steps for reproduce the problem
+            <ol>
+                <li>Mark all the CODI dependencies as provided in the webapp pom.xml (you can uncomment the lines that i added) </li>
+                <li>Add the CODI dependecies in the ear pom.xml and mark as compile/runtime (you can uncomment the lines that i added)</li>
+                <li>Try to run the server you will see:  SEVERE - CDI Beans module deployment failed java.lang.IllegalArgumentException: /testView.xhtml is already mapped to /testView.xhtml via com.maxtorzito.test.TestView -> a further view definition (com.maxtorzito.test.TestView) is invalid</li>
+                <li>Try access to localhost:8080/testView.xhtml and you will see the NULL in  initview and prerenderview messages, 
+                    this is because those annotated method never get called (are ignored) when the dependency is in the ear</li>
+            </ol>
+
+            <strong>
+                The idea to have CODI in the ear is that NOT define in each web app (that are inside of the ear) the CODI dependencies.    
+            </strong>
+
+            <hr/>
+            <div style="background-color: yellow;">
+                Reading from managedbean
+                <br/>
+                Posconstruct message = #{myMBeanTwo.messagePostConstruct!=null ? myMBeanTwo.messagePostConstruct : "NULL"}
+                <br/>
+                InitView message = #{myMBeanTwo.messageInitView!=null ? myMBeanTwo.messageInitView : "NULL"}
+                <br/>
+                PreRenderView message = #{myMBeanTwo.messagePreRenderView!=null ? myMBeanTwo.messagePreRenderView : "NULL"}
+            </div>
+
+        </h:form>
+    </h:body>
+</html>
