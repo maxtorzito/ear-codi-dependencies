@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessS
 @ViewAccessScoped
 public class MyBeanThree implements Serializable{
     
-    public String value;
+    private String value;
 
     public MyBeanThree() {
     }
